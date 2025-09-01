@@ -6,9 +6,16 @@ from player import Player
 def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    clock = pygame.time.Clock()
 
+
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
+    Player.containers = (updatable, drawable)
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
+    dt = 0
 
     # Game Loop
     while True:
@@ -16,19 +23,17 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
-        dt = pygame.time.Clock().tick(60) / 1000
-        screen.fill("#000000")
 
-        player.draw(screen)
+        updatable.update(dt)
+
+        screen.fill("black")
+
+        for obj in drawable:
+            obj.draw(screen)
 
         pygame.display.flip()
-    # End Game Loop
-
-
-
-    print("Starting Asteroids!")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
+        dt = clock.tick(60) / 1000
+        # End Game Loop
 
 if __name__ == "__main__":
     main()
